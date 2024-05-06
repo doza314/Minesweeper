@@ -178,7 +178,29 @@ class game
                 }
             }
 
-            void printBoard()
+            void drawBoard(sf::RenderTarget& target) //Draws board in window
+            {
+                sf::Texture texture;
+                if (!texture.loadFromFile("src/res/blank.png")) 
+                {
+                    // Handle loading error (e.g., print an error message)
+                    std::cout << "ERROR" << std::endl;
+                }
+
+                sf::Sprite cellSprite(texture);
+                cellSprite.setScale(0.2, 0.2);
+
+                for (int i = 0; i < size[1]; i++)
+                {
+                    for (int j = 0; j < size[0]; j++)
+                    {
+                        cellSprite.setPosition(j * 20, i * 20);
+                        target.draw(cellSprite);
+                    }
+                }
+            }
+
+            void printBoard() //Prints matrix to terminal
             {
                 int minecount = 0;
                 for (int i = 0; i < size[1]; i++)
@@ -197,5 +219,41 @@ class game
                 std::cout << minecount << " mines" << std::endl;
 
             }
+
+            int getWidth()
+            {
+                return size[0];
+            }
+            int getHeight()
+            {
+                return size[1];
+            }
     };
 
+class button
+{
+    public:
+        std::vector<int> coords = {0, 0};
+        std::vector<int> size = {200, 100};
+        bool pressed = false;
+        bool clicked = false;
+        std::string textureFile;
+        sf::Texture texture;
+        sf::Sprite sprite;
+
+        void drawButton(sf::RenderTarget& target)
+        {   
+            if (!texture.loadFromFile(textureFile))
+            {
+                std::cout << "ERROR" << std::endl;
+            }
+
+            sprite.setTexture(texture);
+            sprite.setPosition(coords[0], coords[1]);
+            target.draw(sprite);
+        }
+};
+
+void startMenu(game& G);
+void play(game& G);
+void endMenu(game& G);
