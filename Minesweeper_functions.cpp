@@ -90,6 +90,7 @@ void play(game& G, bool& over)
             if (event.type == sf::Event::Closed)
             {
                 window.close();
+                over = true;
             }            
         }
         
