@@ -486,6 +486,25 @@ class game
                         revealed[clickedCoords[0]][clickedCoords[1]] = true;
                         textures[clickedCoords[0]][clickedCoords[1]].loadFromFile("src/res/mine.png");
                         sprites[clickedCoords[0]][clickedCoords[1]].setTexture(textures[clickedCoords[0]][clickedCoords[1]]);
+                        
+                        for(int i = 0; i < size[0]; i++)
+                        {
+                            for(int j = 0; j < size[1]; j++)
+                            {
+                                if (flags[i][j] == true && board[i][j] != -1)
+                                {
+                                    textures[i][j].loadFromFile("src/res/wrong.png");
+                                    sprites[i][j].setTexture(textures[i][j]);
+                                    target.draw(sprites[i][j]);
+                                }
+                                if (board[i][j] == -1)
+                                {
+                                    textures[i][j].loadFromFile("src/res/mine.png");
+                                    sprites[i][j].setTexture(textures[i][j]);
+                                    target.draw(sprites[i][j]);
+                                }
+                            }
+                        }
                         target.draw(sprites[clickedCoords[0]][clickedCoords[1]]);
                         target.display();
                     }
