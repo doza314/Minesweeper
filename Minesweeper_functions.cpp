@@ -1,4 +1,5 @@
-#include "Minesweeper.hpp"
+#include "Minesweeper.h"
+#include "NSB.h"
 
 void startMenu(game& G, bool& over) //Title screen and difficulty prompt
 {
