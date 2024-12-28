@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "Minesweeper.h"
+
 class game
     {
         private:
@@ -334,9 +336,7 @@ class game
                             sprites[coords[0] + i][coords[1] + j].setTexture(textures[coords[0] + i][coords[1] + j]);
                             target.draw(sprites[coords[0] + i][coords[1] + j]); 
                             target.display();
-                            
-                        }
-                        
+                        }   
                     }
                 }
             }

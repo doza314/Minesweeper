@@ -1,5 +1,4 @@
 #include "Minesweeper.h"
-#include "NSB.h"
 
     bool over = false;
     game G;
