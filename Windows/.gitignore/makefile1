@@ -1,0 +1,2 @@
+all:
+	g++ -std=c++17 src/Minesweeper.cpp src/Minesweeper_functions.cpp src/resource.o -o bin/Minesweeper_v1.0.1.exe -I C:/Users/ryanm/OneDrive/Desktop/SFML/include -L lib -lsfml-graphics -lsfml-window -lsfml-system
