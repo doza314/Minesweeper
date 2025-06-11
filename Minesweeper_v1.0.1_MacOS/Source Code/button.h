@@ -12,7 +12,7 @@ class button
         bool pressed = false;
         bool clicked = false;
         bool inside = false;
-        std::string textureFile = "src/res/";
+        std::string textureFile = "";
         std::string names[5] = {"easy", "medium", "hard", "restart", "exit"};
         int diff = 0;
         std::string name;
@@ -21,7 +21,7 @@ class button
 
         void drawButton(sf::RenderWindow& target) //Draws button in window
         {   
-            if (!texture.loadFromFile(textureFile)) // Load texture from file
+            if (!texture.loadFromFile(getResourcePath(textureFile))) // Load texture from file
             {
                 //std::cout << "ERROR" << std::endl;
             }
@@ -42,7 +42,7 @@ class button
                     {
                         pressed = true;
                         inside = true;
-                        textureFile = "src/res/";
+                        textureFile = "";
 
                         if (name != names[diff] + " pressed.png") 
                         {
@@ -65,7 +65,7 @@ class button
                 if (pressed)
                 {   
                     
-                    textureFile = "src/res/";
+                    textureFile = "";
                     name = names[diff];
                     textureFile += name + ".png";
                     drawButton(target);

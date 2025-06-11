@@ -10,7 +10,7 @@ void startMenu(game& G, bool& over) //Title screen and difficulty prompt
 
     sf::Sprite logo;
     sf::Texture logoTexture;
-    logoTexture.loadFromFile("res/minesweeper.png");
+    logoTexture.loadFromFile(getResourcePath("minesweeper.png"));
     logo.setTexture(logoTexture);
     logo.setPosition(-50, 0);
 
@@ -120,7 +120,7 @@ void endMenu(game& G, sf::RenderWindow& target, bool& over, sf::Time& elapsed)
     std::string timeText = "Time: " + std::to_string(elapsedMinutes) + "m " + std::to_string(elapsedSeconds) + "s";
 
     sf::Font font;
-    font.loadFromFile("res/VCR_OSD_MONO_1.001.ttf"); // Replace with your font path
+    font.loadFromFile(getResourcePath("VCR_OSD_MONO_1.001.ttf")); // Replace with your font path
     sf::Text timeTextObject;
     timeTextObject.setFont(font);   
     timeTextObject.setString(timeText);
@@ -141,11 +141,11 @@ void endMenu(game& G, sf::RenderWindow& target, bool& over, sf::Time& elapsed)
 
     if (G.getOutcome() == -1)
     {   
-        gameOverTexture.loadFromFile("res/game over.png");
+        gameOverTexture.loadFromFile(getResourcePath("game over.png"));
     }
     else
     {
-        gameOverTexture.loadFromFile("res/win.png");
+        gameOverTexture.loadFromFile(getResourcePath("win.png"));
     }
 
     sf::RectangleShape background(sf::Vector2f(400, 300));

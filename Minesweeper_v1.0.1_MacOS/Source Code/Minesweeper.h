@@ -10,6 +10,24 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <CoreFoundation/CoreFoundation.h>
+
+inline std::string getResourcePath(const std::string& file) {
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    CFStringRef cfFile = CFStringCreateWithCString(NULL, file.c_str(), kCFStringEncodingUTF8);
+    CFURLRef fileURL = CFBundleCopyResourceURL(mainBundle, cfFile, NULL, NULL);
+    char path[PATH_MAX];
+    std::string result;
+
+    if (fileURL && CFURLGetFileSystemRepresentation(fileURL, true, (UInt8*)path, PATH_MAX)) {
+        result = std::string(path);
+    }
+
+    if (cfFile) CFRelease(cfFile);
+    if (fileURL) CFRelease(fileURL);
+
+    return result;
+}
 
 class game
     {
@@ -232,7 +250,7 @@ class game
                 {
                     for (int j = 0; j < size[1]; j++)
                     {
-                        textures[i][j].loadFromFile("res/blank.png");
+                        textures[i][j].loadFromFile(getResourcePath("blank.png"));
                         board[i][j] = 0;
                         revealed[i][j] = false;
                         flags[i][j] = false;
@@ -340,7 +358,7 @@ class game
                             }
 
                             revealed[coords[0] + i][coords[1] + j] = true;
-                            textures[coords[0] + i][coords[1] + j].loadFromFile("res/" + std::to_string(board[coords[0] + i][coords[1] + j]) + ".png");
+                            textures[coords[0] + i][coords[1] + j].loadFromFile(getResourcePath(std::to_string(board[coords[0] + i][coords[1] + j]) + ".png"));
                             sprites[coords[0] + i][coords[1] + j].setTexture(textures[coords[0] + i][coords[1] + j]);
                             target.draw(sprites[coords[0] + i][coords[1] + j]); 
                             target.display();
@@ -394,7 +412,7 @@ class game
 
                 sf::Texture blankPressed;
                 sf::Sprite blankPressedSprite;
-                blankPressed.loadFromFile("res/blank pressed.png");
+                blankPressed.loadFromFile(getResourcePath("blank pressed.png"));
                 blankPressedSprite.setTexture(blankPressed);
                 
                 while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
@@ -413,7 +431,7 @@ class game
                                     clickedCoords = {cell_coords[i][j][0], cell_coords[i][j][1]};
                                     if (revealed[clickedCoords[0]][clickedCoords[1]] == false && flags[clickedCoords[0]][clickedCoords[1]] == false)
                                     {
-                                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile("res/blank pressed.png");
+                                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile(getResourcePath("blank pressed.png"));
                                         sprites[clickedCoords[0]][clickedCoords[1]].setTexture(textures[clickedCoords[0]][clickedCoords[1]]);
                                         target.draw(sprites[clickedCoords[0]][clickedCoords[1]]); 
                                         target.display();
@@ -454,7 +472,7 @@ class game
                                     flagged = true;
                                     if (flags[i][j] == false && revealed[i][j] == false)
                                     {
-                                        textures[i][j].loadFromFile("res/flag.png");
+                                        textures[i][j].loadFromFile(getResourcePath("flag.png"));
                                         sprites[i][j].setTexture(textures[i][j]);
                                         target.draw(sprites[i][j]);
                                         target.display();
@@ -462,7 +480,7 @@ class game
                                     }
                                     else if (flags[i][j] == true && revealed[i][j] == false)
                                     {
-                                        textures[i][j].loadFromFile("res/blank.png");
+                                        textures[i][j].loadFromFile(getResourcePath("blank.png"));
                                         sprites[i][j].setTexture(textures[i][j]);
                                         target.draw(sprites[i][j]);
                                         target.display();
@@ -487,7 +505,7 @@ class game
                     if (board[clickedCoords[0]][clickedCoords[1]] == -1)
                     {
                         revealed[clickedCoords[0]][clickedCoords[1]] = true;
-                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile("res/mine.png");
+                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile(getResourcePath("mine.png"));
                         sprites[clickedCoords[0]][clickedCoords[1]].setTexture(textures[clickedCoords[0]][clickedCoords[1]]);
                         
                         for(int i = 0; i < size[0]; i++)
@@ -496,13 +514,13 @@ class game
                             {
                                 if (flags[i][j] == true && board[i][j] != -1)
                                 {
-                                    textures[i][j].loadFromFile("res/wrong.png");
+                                    textures[i][j].loadFromFile(getResourcePath("wrong.png"));
                                     sprites[i][j].setTexture(textures[i][j]);
                                     target.draw(sprites[i][j]);
                                 }
                                 if (board[i][j] == -1)
                                 {
-                                    textures[i][j].loadFromFile("res/mine.png");
+                                    textures[i][j].loadFromFile(getResourcePath("mine.png"));
                                     sprites[i][j].setTexture(textures[i][j]);
                                     target.draw(sprites[i][j]);
                                 }
@@ -514,7 +532,7 @@ class game
                     else
                     {
                         revealed[clickedCoords[0]][clickedCoords[1]] = true;
-                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile("res/" + std::to_string(board[clickedCoords[0]][clickedCoords[1]]) + ".png");
+                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile(getResourcePath(std::to_string(board[clickedCoords[0]][clickedCoords[1]]) + ".png"));
                         sprites[clickedCoords[0]][clickedCoords[1]].setTexture(textures[clickedCoords[0]][clickedCoords[1]]);
                         target.draw(sprites[clickedCoords[0]][clickedCoords[1]]); 
                         target.display();
@@ -530,7 +548,7 @@ class game
                 if (!inside && pressed == true && revealed[clickedCoords[0]][clickedCoords[1]] == false)
                 {
                     pressed = false;
-                    textures[clickedCoords[0]][clickedCoords[1]].loadFromFile("res/blank.png");
+                    textures[clickedCoords[0]][clickedCoords[1]].loadFromFile(getResourcePath("blank.png"));
                     sprites[clickedCoords[0]][clickedCoords[1]].setTexture(textures[clickedCoords[0]][clickedCoords[1]]);
                     target.draw(sprites[clickedCoords[0]][clickedCoords[1]]);
                     target.display();
@@ -539,14 +557,14 @@ class game
                 {
                     if (board[clickedCoords[0]][clickedCoords[1]] == -1)
                     {
-                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile("res/mine.png");
+                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile(getResourcePath("mine.png"));
                         sprites[clickedCoords[0]][clickedCoords[1]].setTexture(textures[clickedCoords[0]][clickedCoords[1]]);
                         target.draw(sprites[clickedCoords[0]][clickedCoords[1]]);
                         target.display();
                     }
                     else
                     {
-                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile("res/" + std::to_string(board[clickedCoords[0]][clickedCoords[1]]) + ".png");
+                        textures[clickedCoords[0]][clickedCoords[1]].loadFromFile(getResourcePath(std::to_string(board[clickedCoords[0]][clickedCoords[1]]) + ".png"));
                         sprites[clickedCoords[0]][clickedCoords[1]].setTexture(textures[clickedCoords[0]][clickedCoords[1]]);
                         target.draw(sprites[clickedCoords[0]][clickedCoords[1]]); 
                         target.display();
@@ -566,7 +584,7 @@ class button
         bool pressed = false;
         bool clicked = false;
         bool inside = false;
-        std::string textureFile = "res/";
+        std::string textureFile = "";
         std::string names[5] = {"easy", "medium", "hard", "restart", "exit"};
         int diff = 0;
         std::string name;
@@ -575,7 +593,7 @@ class button
 
         void drawButton(sf::RenderWindow& target) //Draws button in window
         {   
-            if (!texture.loadFromFile(textureFile)) // Load texture from file
+            if (!texture.loadFromFile(getResourcePath(textureFile))) // Load texture from file
             {
                 //std::cout << "ERROR" << std::endl;
             }
@@ -596,7 +614,7 @@ class button
                     {
                         pressed = true;
                         inside = true;
-                        textureFile = "res/";
+                        textureFile = "";
 
                         if (name != names[diff] + " pressed.png") 
                         {
@@ -619,7 +637,7 @@ class button
                 if (pressed)
                 {   
                     
-                    textureFile = "res/";
+                    textureFile = "";
                     name = names[diff];
                     textureFile += name + ".png";
                     drawButton(target);
